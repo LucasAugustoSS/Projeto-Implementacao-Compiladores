@@ -98,4 +98,3 @@ def analisar(codigo):
     tokens = scanner(codigo)
     parser = Parser(tokens)
     parser.parse()
-    
