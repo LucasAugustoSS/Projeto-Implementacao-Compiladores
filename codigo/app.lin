@@ -1,0 +1,15 @@
+int a = 2.6;
+int b = 3 + 1;
+cadeia c = "teste";
+booleano d = verdadeiro;
+int e = 'a';
+
+se ('a' < falso) {
+    escrever("a é menor que b", "teste");
+} senao se (3 + 1 > b) {
+    escrever("a é maior que b", "teste");
+} senao {
+    escrever("a é igual a b", "teste");
+}
+
+escrever();
