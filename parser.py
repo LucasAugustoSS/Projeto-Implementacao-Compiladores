@@ -19,7 +19,7 @@ class Parser:
 
     def parse(self):
         self.parse_programa()
-        print("Programa executado sem problemas de sintaxe.")
+        print("Programa sem problemas de sintaxe.")
 
     def parse_programa(self):
         while self.atual()[0] != "EOF":
@@ -38,8 +38,9 @@ class Parser:
     def parse_declaracao(self):
         self.consumir("TIPO_VAR")
         self.consumir("IDENT")
-        self.consumir("ATRIB")
-        self.parse_expressao()
+        if self.atual()[0] == "ATRIB":
+            self.consumir("ATRIB")
+            self.parse_expressao()
         self.consumir("PONTOVIRG")
 
     def parse_atribuicao(self):
