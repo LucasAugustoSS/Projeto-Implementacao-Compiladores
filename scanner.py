@@ -27,20 +27,28 @@ lexemas = [
     ("VIRGULA",     r','),
     ("PONTOVIRG",   r';'),
     ("IGNORAR",     r'[ \t\n]+'),
-    ("INCOMPAT",    r'.')
+    ("INCOMPAT",    r'.'),
+    ("EOF",         r'EOF'),
 ]
 
 def scanner(codigo):
     tokens = []
     regex = "|".join(f"(?P<{nome}>{expr})" for nome, expr in lexemas)
 
+    print("[", end="")
     for match in re.finditer(regex, codigo):
         tipo = match.lastgroup
         valor = match.group()
         if tipo == "IGNORAR":
             continue
         elif tipo == "INCOMPAT":
+            print((tipo, valor), end="")
+            print("]")
             raise RuntimeError(f"Caractere inesperado: {valor}")
         tokens.append((tipo, valor))
+        print(tokens[-1], end=", ")
+    tokens.append(("EOF", 'EOF'))
+    print(tokens[-1], end="")
+    print("]")
 
     return tokens

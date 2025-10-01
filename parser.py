@@ -6,10 +6,10 @@ class Parser:
         self.pos = 0
 
     def atual(self):
-        return self.tokens[self.pos] if self.pos < len(self.tokens) else ("FIM", None)
+        return self.tokens[self.pos]
 
     def proximo(self):
-        return self.tokens[self.pos+1] if self.pos+1 < len(self.tokens) else ("FIM", None)
+        return self.tokens[self.pos+1]
 
     def consumir(self, token_type):
         if self.atual()[0] == token_type:
@@ -22,7 +22,7 @@ class Parser:
         print("\nPrograma sem problemas de sintaxe.\n")
 
     def parse_programa(self):
-        while self.atual()[0] != "FIM":
+        while self.atual()[0] != "EOF":
             if self.atual()[0] == "FUNCAO":
                 self.parse_funcao()
             else:
