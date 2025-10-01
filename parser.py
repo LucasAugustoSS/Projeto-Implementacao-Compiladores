@@ -23,7 +23,14 @@ class Parser:
 
     def parse_programa(self):
         while self.atual()[0] != "EOF":
-            self.parse_instrucao()
+            if self.atual()[0] == "FUNCAO":
+                self.parse_funcao()
+            else:
+                self.consumir("PRINCIPAL")
+                self.consumir("LCHAVE")
+                while self.atual()[0] != "RCHAVE":
+                    self.parse_instrucao()
+                self.consumir("RCHAVE")
 
     def parse_instrucao(self):
         if self.atual()[0] == "TIPO_VAR":
