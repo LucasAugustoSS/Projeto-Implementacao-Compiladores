@@ -92,7 +92,6 @@ print(x, y);
 ```
 
 ---
-
 ## ✅ Saída Esperada
 
 Se o código não tiver erros:
