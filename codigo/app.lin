@@ -12,3 +12,27 @@ se (a < b) {
 }
 
 escrever(c);
+
+se (a == 5 && b == 10) {
+    escrever("a é igual a 5 e b é igual a 10.");
+}
+
+booleano d = a != b;
+se (d) {
+    escrever("a não é igual a b.");
+}
+
+int i;
+para (i = 0; i < 10; i = i + 1) {
+    escrever(i);
+}
+
+funcao vazio teste() {
+    escrever("teste");
+}
+
+cadeia r = teste();
+
+se (teste()) {}
+
+retornar teste();

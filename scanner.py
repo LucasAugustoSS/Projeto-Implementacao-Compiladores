@@ -1,17 +1,23 @@
 import re
 
 lexemas = [
-    ("TIPO_VAR",    r'int|real|cadeia|booleano|car'),
+    ("TIPO_VAR",    r'int|real|cadeia|car|booleano|vazio'),
+    ("FUNCAO",      r'funcao'),
     ("SENAO",       r'senao'),
     ("SE",          r'se'),
+    ("ENQUANTO",    r'enquanto'),
+    ("FACA",        r'faca'),
+    ("PARA",        r'para'),
+    ("RETORNO",     r'retornar'),
+    ("BOOLEANO",    r'verdadeiro|falso'),
     ("NUMERO_REAL", r'\d+\.\d+'),
     ("NUMERO_INT",  r'\d+'),
     ("CARACTERE",   r'\'.\''),
     ("PALAVRA",     r'"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\''),
-    ("BOOLEANO",    r'verdadeiro|falso'),
     ("IDENT",       r'[a-zA-Z_]\w*'),
-    ("OPER",        r'[+\-*/%]'),
-    ("COMPAR",      r'[<>]=?|=='),
+    ("COMPAR",      r'[<>]=?|==|!='),
+    ("OPER_ARIT",   r'[+\-*/%]'),
+    ("OPER_LOGI",   r'&&|\|\||!'),
     ("ATRIB",       r'='),
     ("LPAREN",      r'\('),
     ("RPAREN",      r'\)'),
@@ -20,7 +26,7 @@ lexemas = [
     ("VIRGULA",     r','),
     ("PONTOVIRG",   r';'),
     ("IGNORAR",     r'[ \t\n]+'),
-    ("MISMATCH",    r'.'),
+    ("INCOMPAT",    r'.')
 ]
 
 def scanner(codigo):
@@ -32,7 +38,7 @@ def scanner(codigo):
         valor = match.group()
         if tipo == 'IGNORAR':
             continue
-        elif tipo == 'MISMATCH':
+        elif tipo == 'INCOMPAT':
             raise RuntimeError(f"Caractere inesperado: {valor}")
         tokens.append((tipo, valor))
 
