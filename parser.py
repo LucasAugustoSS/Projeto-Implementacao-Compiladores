@@ -6,10 +6,10 @@ class Parser:
         self.pos = 0
 
     def atual(self):
-        return self.tokens[self.pos] if self.pos < len(self.tokens) else ("EOF", None)
+        return self.tokens[self.pos] if self.pos < len(self.tokens) else ("FIM", None)
 
     def proximo(self):
-        return self.tokens[self.pos+1] if self.pos+1 < len(self.tokens) else ("EOF", None)
+        return self.tokens[self.pos+1] if self.pos+1 < len(self.tokens) else ("FIM", None)
 
     def consumir(self, token_type):
         if self.atual()[0] == token_type:
@@ -22,7 +22,7 @@ class Parser:
         print("\nPrograma sem problemas de sintaxe.\n")
 
     def parse_programa(self):
-        while self.atual()[0] != "EOF":
+        while self.atual()[0] != "FIM":
             if self.atual()[0] == "FUNCAO":
                 self.parse_funcao()
             else:
@@ -76,7 +76,10 @@ class Parser:
             self.parse_termo()
 
     def parse_termo(self):
-        if self.atual()[0] in ("IDENT", "NUMERO_INT", "NUMERO_REAL", "PALAVRA", "CARACTERE", "BOOLEANO"):
+        if self.atual()[0] == "OPER_LOGI" and self.atual()[1] == "!":
+            self.consumir("OPER_LOGI")
+            self.parse_termo()
+        elif self.atual()[0] in ("IDENT", "NUMERO_INT", "NUMERO_REAL", "PALAVRA", "CARACTERE", "BOOLEANO"):
             if self.atual()[0] == "IDENT" and self.proximo()[0] == "LPAREN":
                 self.parse_funcao_chamado()
             else:
@@ -87,26 +90,6 @@ class Parser:
             self.consumir("RPAREN")
         else:
             raise SyntaxError(f"Valor inesperado: {self.atual()[1]}")
-
-    def parse_funcao(self):
-        self.consumir("FUNCAO")
-        self.consumir("TIPO_VAR")
-        self.consumir("IDENT")
-        self.consumir("LPAREN")
-        if self.atual()[0] != "RPAREN":
-            self.parse_parametros()
-        self.consumir("RPAREN")
-        self.consumir("LCHAVE")
-        while self.atual()[0] != "RCHAVE":
-            self.parse_instrucao()
-        self.consumir("RCHAVE")
-
-    def parse_funcao_chamado(self):
-        self.consumir("IDENT")
-        self.consumir("LPAREN")
-        if self.atual()[0] != "RPAREN":
-            self.parse_argumentos()
-        self.consumir("RPAREN")
 
     def parse_parametros(self):
         self.consumir("TIPO_VAR")
@@ -127,7 +110,7 @@ class Parser:
     def parse_se(self):
         self.consumir("SE")
         self.consumir("LPAREN")
-        self.parse_condicao()
+        self.parse_expressao()
         self.consumir("RPAREN")
         self.consumir("LCHAVE")
         while self.atual()[0] != "RCHAVE":
@@ -146,7 +129,7 @@ class Parser:
     def parse_enquanto(self):
         self.consumir("ENQUANTO")
         self.consumir("LPAREN")
-        self.parse_condicao()
+        self.parse_expressao()
         self.consumir("RPAREN")
         self.consumir("LCHAVE")
         while self.atual()[0] != "RCHAVE":
@@ -161,7 +144,7 @@ class Parser:
         self.consumir("RCHAVE")
         self.consumir("ENQUANTO")
         self.consumir("LPAREN")
-        self.parse_condicao()
+        self.parse_expressao()
         self.consumir("RPAREN")
 
     def parse_para(self):
@@ -172,7 +155,7 @@ class Parser:
         else:
             self.parse_atribuicao()
         self.consumir("PONTOVIRG")
-        self.parse_condicao()
+        self.parse_expressao()
         self.consumir("PONTOVIRG")
         self.parse_atribuicao()
         self.consumir("RPAREN")
@@ -181,22 +164,25 @@ class Parser:
             self.parse_instrucao()
         self.consumir("RCHAVE")
 
-    def parse_condicao(self):
-        if self.atual()[0] == "LPAREN":
-            self.consumir("LPAREN")
-            self.parse_condicao()
-            self.consumir("RPAREN")
-        elif self.atual()[0] == "BOOLEANO":
-            self.consumir("BOOLEANO")
-        elif self.atual()[0] == "OPER_LOGI" and self.atual()[1] == "!":
-            self.consumir("OPER_LOGI")
-            self.parse_condicao()
-        else:
-            self.parse_expressao()
+    def parse_funcao(self):
+        self.consumir("FUNCAO")
+        self.consumir("TIPO_VAR")
+        self.consumir("IDENT")
+        self.consumir("LPAREN")
+        if self.atual()[0] != "RPAREN":
+            self.parse_parametros()
+        self.consumir("RPAREN")
+        self.consumir("LCHAVE")
+        while self.atual()[0] != "RCHAVE":
+            self.parse_instrucao()
+        self.consumir("RCHAVE")
 
-        while self.atual()[0] == "OPER_LOGI" and self.atual()[1] in ("&&", "||"):
-            self.consumir("OPER_LOGI")
-            self.parse_condicao()
+    def parse_funcao_chamado(self):
+        self.consumir("IDENT")
+        self.consumir("LPAREN")
+        if self.atual()[0] != "RPAREN":
+            self.parse_argumentos()
+        self.consumir("RPAREN")
 
     def parse_retorno(self):
         self.consumir("RETORNO")
