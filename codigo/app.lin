@@ -1,38 +1,31 @@
-real a = 2.6;
-int b = 3 + 1;
+funcao int soma(int a, int b) {
+    retornar a + b;
+}
 
-cadeia c;
+int x = 10;
+int y = 20;
+int resultado;
 
-se (a < b) {
-    c = "a é menor que b";
-} senao se (a > b) {
-    c = "a é maior que b";
+resultado = soma(x, y);
+
+se (resultado > 20) {
+    resultado = resultado - 5;
 } senao {
-    c = "a é igual a b";
+    resultado = resultado + 5;
 }
 
-escrever(c);
-
-se (a == 5 && b == 10) {
-    escrever("a é igual a 5 e b é igual a 10.");
+enquanto (resultado < 50) {
+    resultado = resultado + 1;
 }
 
-booleano d = a != b;
-se (d) {
-    escrever("a não é igual a b.");
+faca {
+    resultado = resultado * 2;
+} enquanto (resultado < 200);
+
+para (int i = 0; i < 10; i = i + 1) {
+    resultado = resultado + i;
 }
 
-int i;
-para (i = 0; i < 10; i = i + 1) {
-    escrever(i);
-}
+cadeia texto = "Resultado final: ";
 
-funcao vazio teste() {
-    escrever("teste");
-}
-
-cadeia r = teste();
-
-se (teste()) {}
-
-retornar teste();
+escrever(texto, resultado);
