@@ -28,7 +28,7 @@ lexemas = [
     ("PONTOVIRG",   r';'),
     ("IGNORAR",     r'[ \t\n]+'),
     ("INCOMPAT",    r'.'),
-    ("EOF",         r'EOF'),
+    ("EOF",         None),
 ]
 
 def scanner(codigo):
@@ -42,13 +42,11 @@ def scanner(codigo):
         if tipo == "IGNORAR":
             continue
         elif tipo == "INCOMPAT":
-            print((tipo, valor), end="")
-            print("]")
+            print((tipo, valor), end="]\n")
             raise RuntimeError(f"Caractere inesperado: {valor}")
         tokens.append((tipo, valor))
         print(tokens[-1], end=", ")
-    tokens.append(("EOF", 'EOF'))
-    print(tokens[-1], end="")
-    print("]")
+    tokens.append(("EOF", None))
+    print(tokens[-1], end="]\n")
 
     return tokens
