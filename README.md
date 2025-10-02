@@ -1,6 +1,6 @@
-# Interpretador LIN (Mini Linguagem)
+# Interpretador Brick (Mini Linguagem)
 
-Este projeto implementa um **analisador léxico e sintático** para uma linguagem fictícia chamada **LIN**, composta por variáveis, atribuições, expressões aritméticas, condicionais e chamadas de funções.  
+Este projeto implementa um **analisador léxico e sintático** para uma linguagem fictícia chamada **Brick**.
 
 ## 📂 Estrutura do Projeto
 
@@ -10,7 +10,7 @@ Este projeto implementa um **analisador léxico e sintático** para uma linguage
 ├── parser.py     # Parser (analisador sintático)
 ├── scanner.py    # Scanner (analisador léxico)
 └── codigo/
-    └── app.lin   # Código-fonte exemplo escrito em LIN
+    └── app.br    # Código-fonte exemplo escrito em Brick
 ```
 
 ---
@@ -26,10 +26,10 @@ python main.py
 ```
 
 O programa irá:
-- Ler o código-fonte em `codigo/app.lin`.
+- Ler o código-fonte em `codigo/app.br`.
 - Gerar os tokens correspondentes.
 - Verificar a sintaxe do programa.  
-- Exibir se o programa está **correto** ou **apontar erros de sintaxe**.
+- Exibir se o programa está **correto** ou apontar **erros léxicos e sintáticos**.
 
 ---
 
@@ -38,10 +38,10 @@ O programa irá:
 ### 🔹 Scanner (scanner.py)
 - Usa expressões regulares para **tokenizar** o código.  
 - Reconhece:
-  - **Tipos de variáveis**: `int`, `real`, `cadeia`, `booleano`, `car`
-  - **Palavras reservadas**: `se`, `senao`, `verdadeiro`, `falso`
+  - **Tipos de variáveis**: `int`, `real`, `cadeia`, `booleano`, `car`, `vazio`
+  - **Palavras reservadas**: `principal`, `se`, `enquanto`, `funcao`, `verdadeiro`, `retornar`
   - **Literais**: inteiros, reais, cadeias, caracteres, booleanos
-  - **Operadores**: `+ - * / %`, comparações (`==`, `<`, `>`, `<=`, `>=`)
+  - **Operadores**: aritméticos (`+ - * / %`), lógicos (`&& || !`) comparações (`== < > <= >=`)
   - **Delimitadores**: `() { } , ;`
 - Ignora espaços, tabulações e quebras de linha.
 
@@ -64,31 +64,53 @@ O programa irá:
         y = 5;
     }
     ```
+  - **Laços de repetição**:  
+    ```lin
+    enquanto (x < 20) {
+        x = x + 1;
+    }
+    
+    faca {
+        y = y - 1;
+    } enquanto (y > 0);
+    
+    para (int z = 0; z < 5; z = z + 1) {
+        escrever(z);
+    }
+    ```
+  - **Criação de função**:  
+    ```lin
+    funcao real soma(real x, real y) {
+        retornar x + y;
+    }
+    ```
   - **Chamadas de função**:  
     ```lin
-    print(x, "texto", verdadeiro);
+    escrever(x, "texto", verdadeiro);
     ```
 
 ### 🔹 Main (main.py)
-- Abre o arquivo `codigo/app.lin`.
+- Abre o arquivo `codigo/app.br`.
 - Executa `scanner` e `parser`.
 - Mostra mensagem de sucesso ou erro.
 
 ---
 
-## 📖 Exemplo de Código (app.lin)
+## 📖 Exemplo de Código (app.br)
 
 ```lin
-int x = 5;
-int y = 10;
-
-se (x < y) {
-    x = x + 1;
-} senao {
-    y = y - 1;
+principal {
+    int x = 5;
+    real y = 10.0;
+    
+    se (x < y) {
+        x = x + 1;
+    } senao {
+        y = y - 1;
+    }
+    
+    escrever(x, y);
 }
-
-print(x, y);
 ```
 
 ---
@@ -96,18 +118,17 @@ print(x, y);
 
 Se o código não tiver erros:
 ```
-Programa executado sem problemas de sintaxe.
+Programa sem problemas de sintaxe.
 ```
 
 Se houver erro, será exibida uma mensagem como:
 ```
-SyntaxError: Esperado ;, encontrado ('IDENT', 'y')
+SyntaxError: Esperado PONTOVIRG, encontrado real
 ```
 
 ---
 
 ## 🔧 Próximos Passos
-
-- Implementar **laços de repetição** (`enquanto`, `para`).  
+ 
 - Criar uma etapa de **análise semântica** (tipagem, variáveis não declaradas).  
 - Adicionar um **interpretador** para executar os comandos.  
